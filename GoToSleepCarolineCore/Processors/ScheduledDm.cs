@@ -15,12 +15,12 @@ public class ScheduledDm
     /// <summary>
     /// The ID of the user who created the scheduled DM.
     /// </summary>
-    public ulong CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
     
     /// <summary>
     /// The ID of the user who will receive the scheduled DM.
     /// </summary>
-    public ulong Target { get; set; }
+    public long Target { get; set; }
     
     /// <summary>
     /// The message to be sent to the user.
@@ -51,7 +51,7 @@ public class ScheduledDm
     /// <param name="actionData">The data of the scheduled DM.</param>
     /// <param name="actionTime">The time at which the DM will be sent.</param>
     /// <param name="actionDate">The date on which the DM will be sent.</param>
-    public ScheduledDm(int id, ulong createdBy, string actionData, string actionTime, string actionDate)
+    public ScheduledDm(int id, long createdBy, string actionData, string actionTime, string actionDate)
     {
         // Set provided values
         Id = id;
@@ -70,7 +70,7 @@ public class ScheduledDm
         
         // Get all the data from the JSON string
         JObject json = JObject.Parse(actionData);
-        Target = (ulong) (json["target"] ?? throw new MissingFieldException("target"));
+        Target = (long) (json["target"] ?? throw new MissingFieldException("target"));
         Message = (string) json["message"]! ?? throw new MissingFieldException("message");
     }
     
@@ -81,7 +81,7 @@ public class ScheduledDm
     /// <param name="createdBy"> The ID of the user who created the scheduled DM.</param>
     /// <param name="actionData"> The data of the scheduled DM.</param>
     /// <param name="actionTime"> The time at which the DM will be sent.</param>
-    public ScheduledDm(int id, ulong createdBy, string actionData, string actionTime)
+    public ScheduledDm(int id, long createdBy, string actionData, string actionTime)
     {
         // Set provided values
         Id = id;
@@ -100,7 +100,7 @@ public class ScheduledDm
         // Get all the data from the JSON string
         JObject json = JObject.Parse(actionData);
         
-        Target = (ulong) (json["target"] ?? throw new MissingFieldException("target"));
+        Target = (long) (json["target"] ?? throw new MissingFieldException("target"));
         Message = (string) json["message"]! ?? throw new MissingFieldException("message");
     }
 }

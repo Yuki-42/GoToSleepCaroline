@@ -10,14 +10,14 @@ namespace GoToSleepCaroline.Commands;
 
 public class DMs : ApplicationCommandsModule
 {
-    public Database CommandDatabase { private get; set; }
-    
     [SlashCommandGroup("dm", "Commands for managing scheduled DMs.")]
     public class DmCommands : ApplicationCommandsModule
     {
         [SlashCommandGroup("create", "Commands for creating scheduled DMs.")]
         public class CreateCommands : ApplicationCommandsModule
         {
+            public Database CommandDatabase { private get; set; }
+
             [SlashCommand("once", "Creates a scheduled DM that will be sent once.")]
             public async Task Once(
                 InteractionContext context, 
@@ -28,8 +28,8 @@ public class DMs : ApplicationCommandsModule
                 [Option("date", "The date on which the DM will be sent.")] string date
                 )
             {
+                Console.WriteLine(CommandDatabase.Users);
             }
         }
-
     }
 }
