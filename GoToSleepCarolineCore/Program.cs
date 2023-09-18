@@ -16,7 +16,6 @@ internal class Program
     /// </summary>
     public List<Thread> Actions = new List<Thread>();
         
-        
     private DiscordClient Client { get; set; }
         
     /// <summary>
@@ -42,18 +41,17 @@ internal class Program
         IConfigurationRoot configurationRoot = configurationBuilder.Build();
             
         // Create the database connection 
-        Database database = new Database(configurationRoot["DatabasePath"] ?? throw new 
-            ArgumentNullException("DatabasePath", "The database path is null."));
+        Database database = new("BotData/database.db");
             
         // Set up dependency injection
-        ServiceCollection serviceCollection = new ServiceCollection();
+        ServiceCollection serviceCollection = new();
         serviceCollection.AddSingleton(database);
             
         // Build the service provider
         ServiceProvider services = serviceCollection.BuildServiceProvider();
             
         // Initialise the bot
-        DiscordConfiguration configuration = new DiscordConfiguration()
+        DiscordConfiguration configuration = new()
         {
             Token = configurationRoot["Token"] ?? throw new ArgumentNullException("Token", "The bot token is null."),
             TokenType = TokenType.Bot,

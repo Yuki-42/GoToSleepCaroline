@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DisCatSharp;
+using DisCatSharp.Entities;
+using Newtonsoft.Json.Linq;
 
 namespace GoToSleepCaroline.Processors;
 
@@ -15,12 +17,12 @@ public class ScheduledDm
     /// <summary>
     /// The ID of the user who created the scheduled DM.
     /// </summary>
-    public long CreatedBy { get; set; }
+    public ulong CreatedBy { get; set; }
     
     /// <summary>
     /// The ID of the user who will receive the scheduled DM.
     /// </summary>
-    public long Target { get; set; }
+    public ulong Target { get; set; }
     
     /// <summary>
     /// The message to be sent to the user.
@@ -42,7 +44,11 @@ public class ScheduledDm
     /// </summary>
     public bool Repeat { get; set; }
 
-
+    /// <summary>
+    /// Client used to send the DM.
+    /// </summary>
+    public DiscordClient DiscordClient { get; set; }
+    
     /// <summary>
     /// Initialises a new instance of the <see cref="ScheduledDm"/> class. This instance will not repeat. 
     /// </summary>
@@ -51,7 +57,7 @@ public class ScheduledDm
     /// <param name="actionData">The data of the scheduled DM.</param>
     /// <param name="actionTime">The time at which the DM will be sent.</param>
     /// <param name="actionDate">The date on which the DM will be sent.</param>
-    public ScheduledDm(int id, long createdBy, string actionData, string actionTime, string actionDate)
+    public ScheduledDm(int id, ulong createdBy, string actionData, string actionTime, string actionDate)
     {
         // Set provided values
         Id = id;
@@ -70,7 +76,7 @@ public class ScheduledDm
         
         // Get all the data from the JSON string
         JObject json = JObject.Parse(actionData);
-        Target = (long) (json["target"] ?? throw new MissingFieldException("target"));
+        Target = (ulong) (json["target"] ?? throw new MissingFieldException("target"));
         Message = (string) json["message"]! ?? throw new MissingFieldException("message");
     }
     
@@ -81,7 +87,7 @@ public class ScheduledDm
     /// <param name="createdBy"> The ID of the user who created the scheduled DM.</param>
     /// <param name="actionData"> The data of the scheduled DM.</param>
     /// <param name="actionTime"> The time at which the DM will be sent.</param>
-    public ScheduledDm(int id, long createdBy, string actionData, string actionTime)
+    public ScheduledDm(int id, ulong createdBy, string actionData, string actionTime)
     {
         // Set provided values
         Id = id;
@@ -100,7 +106,56 @@ public class ScheduledDm
         // Get all the data from the JSON string
         JObject json = JObject.Parse(actionData);
         
-        Target = (long) (json["target"] ?? throw new MissingFieldException("target"));
+        Target = (ulong) (json["target"] ?? throw new MissingFieldException("target"));
         Message = (string) json["message"]! ?? throw new MissingFieldException("message");
+    }
+    
+    /// <summary>
+    /// Creates a new thread that will ingest the scheduled DM and create an executor.
+    /// </summary>
+    /// <returns></returns>
+    public Thread CreateExecutor()
+    {
+        Thread executor;
+        
+        // Handle simpler case first
+        if (!Repeat)
+        {
+            // Create datetime object
+            DateTime scheduledDateTime = new(ScheduledDate.Year, ScheduledDate.Month, ScheduledDate.Day, ScheduledTime.Hour, ScheduledTime.Minute, ScheduledTime.Second);
+            
+            // Create the thread
+            executor = new Thread(() => Executor(scheduledDateTime));
+            return executor;
+        } 
+        
+        // Create a thread that will run every day at the specified time
+        executor = new Thread(() =>
+        {
+            // Create datetime object
+            DateTime scheduledDateTime = new(ScheduledDate.Year, ScheduledDate.Month, ScheduledDate.Day, ScheduledTime.Hour, ScheduledTime.Minute, ScheduledTime.Second);
+            
+            // Create the thread
+            while (true)
+            {
+                Executor(scheduledDateTime);
+                scheduledDateTime.AddDays(1);
+            }
+        });
+        
+        return executor;
+    }
+
+    private void Executor(DateTime scheduledDateTime)
+    {
+        // Wait until the scheduled time
+        while (DateTime.Now < scheduledDateTime)
+        {
+            Thread.Sleep(1000);
+        }
+                
+        // Create the DM
+        DiscordDmChannel dmChannel = DiscordClient.GetChannelAsync(Target).Result as DiscordDmChannel;
+        dmChannel.SendMessageAsync(Message);
     }
 }

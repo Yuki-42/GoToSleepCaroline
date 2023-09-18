@@ -9,7 +9,7 @@ namespace GoToSleepCaroline;
 [EventHandler]
 public class Events
 {
-    public  Database CommandDatabase { private get; set; }
+    public Database CommandDatabase { private get; set; }
     [Event]
     public async Task MessageCreated(DiscordClient client, MessageCreateEventArgs eventArgs)
     {
