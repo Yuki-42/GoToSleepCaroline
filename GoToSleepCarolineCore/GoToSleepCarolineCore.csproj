@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>GoToSleepCaroline</AssemblyName>
+        <RootNamespace>GoToSleepCaroline</RootNamespace>
+        <LangVersion>latestmajor</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DisCatSharp" Version="10.4.2-nightly-022" />
+      <PackageReference Include="DisCatSharp.ApplicationCommands" Version="10.4.2-nightly-022" />
+      <PackageReference Include="DisCatSharp.Attributes" Version="10.4.2" />
+      <PackageReference Include="DisCatSharp.CommandsNext" Version="10.4.2-nightly-022" />
+      <PackageReference Include="DisCatSharp.Common" Version="10.4.2-nightly-022" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-rc.1.23419.4" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+
+    
+
+    </ItemGroup>
+
+
+
+
+</Project>
