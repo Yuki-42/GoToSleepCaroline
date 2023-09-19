@@ -45,30 +45,12 @@ public class DatabaseUser
     /// <param name="isBanned">The banned status of the user.</param>
     /// <param name="addedOn">The date on which the user was added to the database.</param>
     
-    public DatabaseUser(ulong id, string username, string displayName, bool isAdmin, bool isBanned, DateOnly addedOn)
+    public DatabaseUser(ulong id, string username, string? displayName, bool isAdmin, bool isBanned, DateOnly addedOn)
     {
         // Set provided values
         Id = id;
         Username = username;
         DisplayName = displayName;
-        IsAdmin = isAdmin;
-        IsBanned = isBanned;
-        AddedOn = addedOn;
-    }
-    
-    /// <summary>
-    /// Creates a new instance of the <see cref="DatabaseUser"/> class without a display name.
-    /// </summary>
-    /// <param name="id">The ID of the user.</param>
-    /// <param name="username">The username of the user.</param>
-    /// <param name="isAdmin">The admin status of the user.</param>
-    /// <param name="isBanned">The banned status of the user.</param>
-    /// <param name="addedOn">The date on which the user was added to the database.</param>
-    public DatabaseUser(ulong id, string username, bool isAdmin, bool isBanned, DateOnly addedOn)
-    {
-        // Set provided values
-        Id = id;
-        Username = username;
         IsAdmin = isAdmin;
         IsBanned = isBanned;
         AddedOn = addedOn;
