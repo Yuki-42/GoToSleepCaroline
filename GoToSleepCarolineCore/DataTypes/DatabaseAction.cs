@@ -65,7 +65,7 @@ public class DatabaseAction
     /// <param name="triggerCount">The number of times the action has been triggered.</param>
     /// <param name="createdOn">The date on which the action was created.</param>
     
-    public DatabaseAction(int id, ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, DateOnly actionDate, bool repeatAction, int triggerCount, DateOnly createdOn)
+    public DatabaseAction(int id, ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, DateOnly? actionDate, bool repeatAction, int triggerCount, DateOnly createdOn)
     {
         // Set provided values
         Id = id;
@@ -74,30 +74,6 @@ public class DatabaseAction
         ActionData = actionData;
         ActionTime = actionTime;
         ActionDate = actionDate;
-        RepeatAction = repeatAction;
-        TriggerCount = triggerCount;
-        CreatedOn = createdOn;
-    }
-    
-    /// <summary>
-    /// Creates a new instance of the <see cref="DatabaseAction"/> class without a date. This should be used for repeating actions.
-    /// </summary>
-    /// <param name="id">The ID of the action.</param>
-    /// <param name="createdBy">The ID of the user who created the action.</param>
-    /// <param name="actionType">The ID of the action type.</param>
-    /// <param name="actionData">The data of the action.</param>
-    /// <param name="actionTime">The time at which the action will be performed.</param>
-    /// <param name="repeatAction">The action will be repeated every day at the specified time.</param>
-    /// <param name="triggerCount">The number of times the action has been triggered.</param>
-    /// <param name="createdOn">The date on which the action was created.</param>
-    public DatabaseAction(int id, ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, bool repeatAction, int triggerCount, DateOnly createdOn)
-    {
-        // Set provided values
-        Id = id;
-        CreatedBy = createdBy;
-        ActionType = actionType;
-        ActionData = actionData;
-        ActionTime = actionTime;
         RepeatAction = repeatAction;
         TriggerCount = triggerCount;
         CreatedOn = createdOn;
