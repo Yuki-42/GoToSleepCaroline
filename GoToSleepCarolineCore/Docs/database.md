@@ -186,3 +186,30 @@ This class is used to interact with the database described above.
 | Users | List<DatabaseUser> | List of users in the database |
 
 ## Methods
+
+This section details the different methods in the Database class, sorted by their effect on the database.
+
+### Add methods 
+
+This section details all the methods used to add data to the database.
+
+#### AddUser
+
+This method adds a user to the database using the provided information.
+
+##### Parameters
+
+| Name        | Type    | Description                                         | Nullable |
+|-------------|---------|-----------------------------------------------------|----------|
+| userId      | ulong   | Unique identifier of the user. Provided by discord. | No       |
+| username    | string  | Username of the user. Provided by discord.          | No       |
+| displayName | string? | Display name of the user. Provided by discord.      | Yes      |
+| isAdmin     | bool?   | The admin status of the user                        | yes      | 
+
+### Remove methods 
+
+This section details all the methods used to remove data from the database.
+
+### Alter Methods 
+
+This section details all the methods used to alter data in the database.
