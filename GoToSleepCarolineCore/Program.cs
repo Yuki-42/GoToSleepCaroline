@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Data;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using DisCatSharp;
 using DisCatSharp.ApplicationCommands;
@@ -34,7 +35,7 @@ internal class Program
     private static async Task MainAsync()
     {
         // Initialise the config file
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        ConfigurationBuilder configurationBuilder = new();
         configurationBuilder.AddJsonFile($"BotData/config.json");
 
         // Assign the config
@@ -49,11 +50,11 @@ internal class Program
             
         // Build the service provider
         ServiceProvider services = serviceCollection.BuildServiceProvider();
-            
+        
         // Initialise the bot
         DiscordConfiguration configuration = new()
         {
-            Token = configurationRoot["Token"] ?? throw new ArgumentNullException("Token", "The bot token is null."),
+            Token = configurationRoot["token"] ?? throw new DataException("Token is null."),
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.DirectMessages,
             AutoReconnect = true,
