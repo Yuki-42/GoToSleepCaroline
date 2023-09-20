@@ -24,7 +24,7 @@ public class Events
         // Check if the user exists in the database
         if (!CommandDatabase.CheckUserExists(eventArgs.Author.Id))
         {
-            CommandDatabase.AddUser(eventArgs.Author.Id, eventArgs.Author.Username, eventArgs.Author.GlobalName);
+            CommandDatabase.AddUser(eventArgs.Author.Id, eventArgs.Author.Username, eventArgs.Author.GlobalName, null, null);
         }
     }
     
