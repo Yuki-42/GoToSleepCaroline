@@ -1,9 +1,9 @@
 ﻿using GoToSleepCaroline.DataTypes;
 using Newtonsoft.Json.Linq;
+using Microsoft.Data.Sqlite;
 
 namespace GoToSleepCaroline;
 
-using System.Data.SQLite;
 /// <summary>
 /// Interfaces with the local database to store and retrieve scheduled actions.
 /// </summary>
@@ -12,31 +12,30 @@ public class Database
     /// <summary>
     /// The connection to the database.
     /// </summary>
-    private readonly SQLiteConnection _connection;
+    private readonly SqliteConnection _connection;
     
     /// <summary>
     /// Initialises a new instance of the <see cref="Database"/> class.
     /// </summary>
     /// <param name="databasePath">The path to the database.</param>
-    /// <exception cref="SQLiteException">Thrown when there is errors with the database.</exception>
+    /// <exception cref="SqliteException">Thrown when there is errors with the database.</exception>
     public Database(string databasePath)
     {
         // Connect to the database
-        _connection = new SQLiteConnection($"Data Source={databasePath};Version=3;");
+        _connection = new SqliteConnection($"Data Source={databasePath};");
         _connection.Open();
         
         // Get List of Tables in Database
-        SQLiteCommand command = new("SELECT name FROM sqlite_master WHERE type='table';", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteCommand command = new("SELECT name FROM sqlite_master WHERE type='table';", _connection);
+        SqliteDataReader reader = command.ExecuteReader();
         
         // Ensure that all tables exist
         if (!reader.HasRows)
         {
-            throw new SQLiteException("The database is missing tables.");
+            throw new SqliteException("The database is missing tables.", 1);
         }
         
         // Ensure that the tables are named correctly
-        // TODO: Make it ask for user input, and if it gets a yes, create the tables automatically 
         List<string> tableNames = new();
         while (reader.Read())
         {
@@ -53,7 +52,7 @@ public class Database
             // Check if the user wants to create the tables
             if (!input.Equals("y"))
             {
-                throw new SQLiteException("The database is missing tables.");
+                throw new SqliteException("The database is missing tables.", 1);
             }
         }
 
@@ -61,7 +60,7 @@ public class Database
         if (!tableNames.Contains("Users"))
         {
             // Create the table if it doesn't exist
-            command = new SQLiteCommand("""
+            command = new SqliteCommand("""
                                         CREATE TABLE Users (
                                             Id SERIAL PRIMARY KEY,
                                             Username string NOT NULL,
@@ -76,7 +75,7 @@ public class Database
 
         if (!tableNames.Contains("Actions"))
         {
-            command = new SQLiteCommand("""
+            command = new SqliteCommand("""
                                         CREATE TABLE Actions (
                                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                             CreatedBy INTEGER NOT NULL,
@@ -96,7 +95,7 @@ public class Database
 
         if (!tableNames.Contains("ActionTypes"))
         {
-            command = new SQLiteCommand("""
+            command = new SqliteCommand("""
                                         CREATE TABLE ActionTypes (
                                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                             Name string NOT NULL,
@@ -109,7 +108,7 @@ public class Database
         
         if (!tableNames.Contains("Logs"))
         {
-            command = new SQLiteCommand("""
+            command = new SqliteCommand("""
                                         CREATE TABLE Logs (
                                             Id INTEGER PRIMARY KEY AUTOINCREMENT,
                                             CreatedBy INTEGER NOT NULL,
@@ -137,8 +136,8 @@ public class Database
     {
         get
         {
-            SQLiteCommand command = new("SELECT * FROM Users;", _connection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            SqliteCommand command = new("SELECT * FROM Users;", _connection);
+            SqliteDataReader reader = command.ExecuteReader();
             
             List<DatabaseUser> users = new();
             
@@ -166,8 +165,8 @@ public class Database
         get
         {
             // Create the command
-            SQLiteCommand command = new("SELECT * FROM Actions;", _connection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            SqliteCommand command = new("SELECT * FROM Actions;", _connection);
+            SqliteDataReader reader = command.ExecuteReader();
             
             List<DatabaseAction> actions = new();
             
@@ -200,8 +199,8 @@ public class Database
     {
         get
         {
-            SQLiteCommand command = new("SELECT * FROM ActionTypes;", _connection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            SqliteCommand command = new("SELECT * FROM ActionTypes;", _connection);
+            SqliteDataReader reader = command.ExecuteReader();
             
             List<DatabaseActionType> actionTypes = new();
             
@@ -221,8 +220,8 @@ public class Database
     {
         get
         {
-            SQLiteCommand command = new("SELECT * FROM Logs;", _connection);
-            SQLiteDataReader reader = command.ExecuteReader();
+            SqliteCommand command = new("SELECT * FROM Logs;", _connection);
+            SqliteDataReader reader = command.ExecuteReader();
             
             List<DatabaseLog> logs = new();
             
@@ -253,8 +252,8 @@ public class Database
     
     public bool CheckUserExists(ulong userId)
     {
-        SQLiteCommand command = new SQLiteCommand($"SELECT * FROM Users WHERE Id = {userId};", _connection);
-        SQLiteDataReader reader = command.ExecuteReader();
+        SqliteCommand command = new($"SELECT * FROM Users WHERE Id = {userId};", _connection);
+        SqliteDataReader reader = command.ExecuteReader();
         
         return reader.HasRows;
     }
@@ -271,10 +270,18 @@ public class Database
     /// <param name="userId">The ID of the user to add.</param>
     /// <param name="username">The username of the user to add.</param>
     /// <param name="displayName">The display name of the user to add.</param>
-    public void AddUser(ulong userId, string username, string displayName)
+    /// <param name="isAdmin">The admin status of the user.</param>
+    /// <param name="isBanned">The banned status of the user.</param>
+    public void AddUser(ulong userId, string username, string? displayName, bool? isAdmin, bool? isBanned)
     {
         // Create the command 
-        SQLiteCommand command = new($"INSERT INTO Users (Id, Username, DisplayName) VALUES ({userId}, '{username}', '{displayName}');", _connection);
+        SqliteCommand command = new($"INSERT INTO Users (Id, Username, DisplayName, IsAdmin, IsBanned) VALUES ({userId}, '{username}', '{displayName}', '{isAdmin}', '{isBanned}');", _connection);
         command.ExecuteNonQuery();
+    }
+
+    public void AddUser(DatabaseUser user)
+    {
+        // Create the command 
+        SqliteCommand command = new($"INSERT INTO Users VALUES ()");
     }
 }

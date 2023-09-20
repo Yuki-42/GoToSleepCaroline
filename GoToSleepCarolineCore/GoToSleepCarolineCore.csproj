@@ -16,8 +16,8 @@
       <PackageReference Include="DisCatSharp.Attributes" Version="10.4.2" />
       <PackageReference Include="DisCatSharp.CommandsNext" Version="10.4.2-nightly-022" />
       <PackageReference Include="DisCatSharp.Common" Version="10.4.2-nightly-022" />
+      <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0-rc.1.23419.6" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-rc.1.23419.4" />
-      <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
 
     
 
