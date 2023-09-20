@@ -2,6 +2,7 @@
 using DisCatSharp.Entities;
 using DisCatSharp.Enums;
 using DisCatSharp.EventArgs;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GoToSleepCaroline;
@@ -9,8 +10,12 @@ namespace GoToSleepCaroline;
 [EventHandler]
 public class Events
 {
-    public Database CommandDatabase { private get; set; }
-    [Event]
+    /// <summary>
+    /// The MessageCreated event handler.
+    /// </summary>
+    /// <param name="client">The client object.</param>
+    /// <param name="eventArgs">The event arguments.</param>
+    [Event(DiscordEvent.MessageCreated)]
     public async Task MessageCreated(DiscordClient client, MessageCreateEventArgs eventArgs)
     {
         // Check that the message is not from a bot
@@ -19,19 +24,24 @@ public class Events
             return;
         }
         
-        CommandDatabase = eventArgs.ServiceProvider.GetRequiredService<Database>();
+        Database commandDatabase = eventArgs.ServiceProvider.GetRequiredService<Database>();
 
         // Check if the user exists in the database
-        if (!CommandDatabase.CheckUserExists(eventArgs.Author.Id))
+        if (!commandDatabase.CheckUserExists(eventArgs.Author.Id))
         {
-            CommandDatabase.AddUser(eventArgs.Author.Id, eventArgs.Author.Username, eventArgs.Author.GlobalName, null, null);
+            commandDatabase.AddUser(eventArgs.Author.Id, eventArgs.Author.Username, eventArgs.Author.GlobalName, null, null);
         }
     }
     
-    [Event]
+    [Event(DiscordEvent.Ready)]
     public async Task Ready(DiscordClient client, ReadyEventArgs eventArgs)
     {
+        // Get service provider objects
+        Utils utils = eventArgs.ServiceProvider.GetRequiredService<Utils>();
+        ConfigurationRoot configurationRoot = eventArgs.ServiceProvider.GetRequiredService<ConfigurationRoot>();
+        
         // Set the activity
+        DiscordActivity activity = utils.ConvertActivity(configurationRoot["status"]["type"], configurationRoot["status"]["text"]);
         await client.UpdateStatusAsync(new DiscordActivity("you sleep.", ActivityType.Watching));
     }
 }

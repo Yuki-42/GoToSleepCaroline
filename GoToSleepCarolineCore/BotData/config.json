@@ -1,3 +1,7 @@
 ﻿{
-    "token": "YOUR TOKEN HERE"
+    "token": "YOUR TOKEN HERE",
+    "status": {
+        "text": "with with the priest",
+        "type": "PLAYING"
+    }
 }

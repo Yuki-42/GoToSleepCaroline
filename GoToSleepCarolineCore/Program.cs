@@ -17,7 +17,6 @@ internal class Program
     /// </summary>
     public List<Thread> Actions = new List<Thread>();
         
-    private DiscordClient Client { get; set; }
         
     /// <summary>
     /// The main entry point for the application.
@@ -43,10 +42,15 @@ internal class Program
             
         // Create the database connection 
         Database database = new("BotData/database.db");
+        
+        // Create the Utils instance
+        Utils utils = new();
             
         // Set up dependency injection
         ServiceCollection serviceCollection = new();
         serviceCollection.AddSingleton(database);
+        serviceCollection.AddSingleton(configurationRoot);
+        serviceCollection.AddSingleton(utils);
             
         // Build the service provider
         ServiceProvider services = serviceCollection.BuildServiceProvider();
