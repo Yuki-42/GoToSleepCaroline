@@ -35,7 +35,7 @@ public class DatabaseLog
     /// <summary>
     /// The date on which the log entry was created.
     /// </summary>
-    public DateOnly CreatedOn { get; set; }
+    public DateTime CreatedOn { get; set; }
     
     /// <summary>
     /// Creates a new instance of the <see cref="DatabaseLog"/> class.
@@ -46,7 +46,7 @@ public class DatabaseLog
     /// <param name="logMessage"></param>
     /// <param name="logData"></param>
     /// <param name="createdOn"></param>
-    public DatabaseLog(int id, ulong createdBy, int logLevel, string logMessage, JObject logData, DateOnly createdOn)
+    public DatabaseLog(int id, ulong createdBy, int logLevel, string logMessage, JObject logData, DateTime createdOn)
     {
         // Set the properties
         Id = id;
