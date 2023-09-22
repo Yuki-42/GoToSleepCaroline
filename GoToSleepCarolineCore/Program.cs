@@ -62,7 +62,7 @@ internal class Program
             TokenType = TokenType.Bot,
             Intents = DiscordIntents.AllUnprivileged | DiscordIntents.DirectMessages,
             AutoReconnect = true,
-            MinimumLogLevel = LogLevel.Debug,
+            MinimumLogLevel = LogLevel.Information,
             ServiceProvider = services
         };
             

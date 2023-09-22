@@ -40,8 +40,12 @@ public class Events
         Utils utils = eventArgs.ServiceProvider.GetRequiredService<Utils>();
         ConfigurationRoot configurationRoot = eventArgs.ServiceProvider.GetRequiredService<ConfigurationRoot>();
         
+        Console.WriteLine("ready");
+        
         // Set the activity
-        DiscordActivity activity = utils.ConvertActivity(configurationRoot["status"]["type"], configurationRoot["status"]["text"]);
-        await client.UpdateStatusAsync(new DiscordActivity("you sleep.", ActivityType.Watching));
+        DiscordActivity activity = utils.ConvertActivity(
+            configurationRoot["statusType"] ?? throw new ArgumentException("Missing config field 'statusType'"),
+            configurationRoot["statusText"] ?? throw new ArgumentException("Missing config field 'statusText'"));
+        await client.UpdateStatusAsync(activity, UserStatus.Online);
     }
 }
