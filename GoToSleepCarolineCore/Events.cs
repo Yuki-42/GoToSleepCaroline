@@ -39,7 +39,9 @@ public class Events
     {
         // Get service provider objects
         Utils utils = eventArgs.ServiceProvider.GetRequiredService<Utils>();
-        ConfigurationRoot configurationRoot = eventArgs.ServiceProvider.GetRequiredService<ConfigurationRoot>();
+        IConfigurationRoot configurationRoot = eventArgs.ServiceProvider.GetRequiredService<IConfigurationRoot>();
+        
+        
         
         Console.WriteLine("ready");
         
