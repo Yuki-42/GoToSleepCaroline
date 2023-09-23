@@ -18,6 +18,7 @@ public class Events
     [Event(DiscordEvent.MessageCreated)]
     public async Task MessageCreated(DiscordClient client, MessageCreateEventArgs eventArgs)
     {
+        Console.WriteLine("Test");
         // Check that the message is not from a bot
         if (eventArgs.Author.IsBot)
         {

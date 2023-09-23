@@ -3,7 +3,9 @@ using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using DisCatSharp;
 using DisCatSharp.ApplicationCommands;
+using DisCatSharp.Entities;
 using DisCatSharp.Enums;
+using DisCatSharp.EventArgs;
 using GoToSleepCaroline.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -69,7 +71,7 @@ internal class Program
         // Create the client
         DiscordClient client = new(configuration);
         client.RegisterEventHandlers(Assembly.GetExecutingAssembly());
-            
+        
         // Register the commands
         ApplicationCommandsExtension commands = client.UseApplicationCommands(new ApplicationCommandsConfiguration
         {
