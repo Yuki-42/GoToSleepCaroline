@@ -15,21 +15,22 @@ public class Utils
     {
         // Match the type to the correct activity type
         ActivityType activityType;
+        
         switch (type.ToUpper())
         {
-            case "playing":
+            case "PLAYING":
                 activityType = ActivityType.Playing;
                 break;
-            case "streaming":
+            case "STREAMING":
                 activityType = ActivityType.Streaming;
                 break;
-            case "listening":
+            case "LISTENING":
                 activityType = ActivityType.ListeningTo;
                 break;
-            case "watching":
+            case "WATCHING":
                 activityType = ActivityType.Watching;
                 break;
-            case "competing":
+            case "COMPETING":
                 activityType = ActivityType.Competing;
                 break;
             default:
