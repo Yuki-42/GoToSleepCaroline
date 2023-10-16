@@ -45,14 +45,14 @@ public class DatabaseUser
     /// <param name="isBanned">The banned status of the user.</param>
     /// <param name="addedOn">The date on which the user was added to the database.</param>
     
-    public DatabaseUser(ulong id, string username, string? displayName, bool isAdmin, bool isBanned, DateOnly addedOn)
+    public DatabaseUser(ulong id, string username, string? displayName, bool? isAdmin, bool? isBanned, DateOnly? addedOn)
     {
         // Set provided values
         Id = id;
         Username = username;
         DisplayName = displayName;
-        IsAdmin = isAdmin;
-        IsBanned = isBanned;
-        AddedOn = addedOn;
+        IsAdmin = isAdmin ?? false;
+        IsBanned = isBanned ?? false;
+        AddedOn = addedOn ?? DateOnly.FromDateTime(DateTime.Now);
     }
 }
