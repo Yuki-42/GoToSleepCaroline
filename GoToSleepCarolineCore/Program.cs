@@ -38,22 +38,22 @@ internal class Program
         // Initialise the config file
         ConfigurationBuilder configurationBuilder = new();
         configurationBuilder.AddJsonFile($"BotData/config.json");
-
+        
         // Assign the config
         IConfigurationRoot configurationRoot = configurationBuilder.Build();
-            
+        
         // Create the database connection 
         Database database = new("BotData/database.db");
         
         // Create the Utils instance
         Utils utils = new();
-            
+        
         // Set up dependency injection
         ServiceCollection serviceCollection = new();
         serviceCollection.AddSingleton(database);
         serviceCollection.AddSingleton(configurationRoot);
         serviceCollection.AddSingleton(utils);
-            
+        
         // Build the service provider
         ServiceProvider services = serviceCollection.BuildServiceProvider();
         
@@ -67,7 +67,7 @@ internal class Program
             MinimumLogLevel = LogLevel.Information,
             ServiceProvider = services
         };
-            
+        
         // Create the client
         DiscordClient client = new(configuration);
         client.RegisterEventHandlers(Assembly.GetExecutingAssembly());
@@ -78,10 +78,10 @@ internal class Program
             ServiceProvider = services
         });
         commands.RegisterGlobalCommands<DMs>();
-            
+        
         // Connect the client
         await client.ConnectAsync();
-            
+        
         // Prevent the application from closing
         await Task.Delay(-1);
     }
