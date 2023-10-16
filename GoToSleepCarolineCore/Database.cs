@@ -322,4 +322,30 @@ public class Database
         SqliteCommand command = new($"INSERT INTO Logs (CreatedBy, LogLevel, LogMessage, LogData) VALUES ({createdBy}, {logLevel}, '{logMessage}', '{logData}');", _connection);
         command.ExecuteNonQuery();
     }
+    /*
+=========================================================================================================================================================
+        * Check methods
+=========================================================================================================================================================
+     */
+
+    public bool CheckUserAdmin(ulong userId)
+    {
+        // Create the command
+        SqliteCommand command = new($"SELECT IsAdmin FROM Users WHERE Id = {userId};", _connection);
+        
+        // Execute the command
+        SqliteDataReader reader = command.ExecuteReader();
+        
+        // Check if the user exists
+        if (!reader.HasRows)
+        {
+            throw new ArgumentException("The user does not exist.");
+        }
+        
+        // Read the data
+        reader.Read();
+        
+        // Return the data
+        return reader.GetBoolean(0);
+    }
 }

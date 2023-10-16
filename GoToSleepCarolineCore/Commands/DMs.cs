@@ -4,6 +4,7 @@ using DisCatSharp.ApplicationCommands.Attributes;
 using DisCatSharp.ApplicationCommands.Context;
 using DisCatSharp.Entities;
 using DisCatSharp.Enums;
+using GoToSleepCaroline.DataTypes;
 using Newtonsoft.Json.Linq;
 
 namespace GoToSleepCaroline.Commands;
@@ -16,6 +17,9 @@ public class DMs : ApplicationCommandsModule
         [SlashCommandGroup("create", "Commands for creating scheduled DMs.")]
         public class CreateCommands : ApplicationCommandsModule
         {
+            /// <summary>
+            /// The database object.
+            /// </summary>
             public Database CommandDatabase { private get; set; }
 
             [SlashCommand("once", "Creates a scheduled DM that will be sent once.")]
@@ -94,6 +98,70 @@ public class DMs : ApplicationCommandsModule
                 {
                     Content = $"Created a scheduled DM to {user.Mention} at {timeOnly.ToString()} every day."
                 });
+            }
+        }
+        
+        [SlashCommandGroup("list", "Commands for listing scheduled DMs.")]
+        public class ListCommands : ApplicationCommandsModule
+        {
+            /// <summary>
+            /// The database object.
+            /// </summary>
+            public Database CommandDatabase { private get; set; }
+
+            [SlashCommand("all", "Lists all scheduled DMs.")]
+            public async Task ListAll(InteractionContext context)
+            {
+                // Check if the user exists in the database
+                if (!CommandDatabase.CheckUserExists(context.User.Id))
+                {
+                    CommandDatabase.AddUser(context.User.Id, context.User.Username, context.User.GlobalName, null, null);
+                }
+                
+                // Check that the user has admin permissions
+                if (!CommandDatabase.CheckUserAdmin(context.User.Id))
+                {
+                    await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    {
+                        Content = "You do not have permission to use this command."
+                    });
+                    return;
+                }
+                
+                // Get the actions
+                List<DatabaseAction> actions = CommandDatabase.Actions;
+                
+                // Create the embed
+                DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder()
+                {
+                    Title = "Scheduled DMs",
+                    Color = DiscordColor.Blurple
+                };
+                
+                // Add the fields
+                foreach (DatabaseAction action in actions)
+                {
+                    // Get the user
+                    DiscordUser user = await context.Client.GetUserAsync(action.CreatedBy);
+                    
+                    // Get the target user
+                    DiscordUser targetUser = await context.Client.GetUserAsync(action.ActionData["target"]!.ToObject<ulong>());  // The target user is guaranteed to exist
+                    
+                    // Create the field
+                    DiscordEmbedField field = new DiscordEmbedField(
+                    $"ID: {action.Id}",
+                    $"Created by {user.Mention} on {action.CreatedAt.ToString()}.\n" +
+                    $"Target: {targetUser.Mention}\n" +
+                    $"Message: {action.ActionData["messageText"]!.ToObject<string>()}\n" +
+                    $"Time: {action..ToString()}\n" +
+                    $"Date: {action.Date.ToString()}\n" +
+                    $"Repeat: {action.Repeat}"
+                    );
+                    
+                    // Add the field
+                    embedBuilder.AddField(field);
+                }
+                
             }
         }
     }
