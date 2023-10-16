@@ -139,7 +139,7 @@ public class ScheduledDm
             while (true)
             {
                 Executor(scheduledDateTime);
-                scheduledDateTime.AddDays(1);
+                scheduledDateTime = scheduledDateTime.AddDays(1);
             }
         });
         
