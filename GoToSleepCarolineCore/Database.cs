@@ -290,10 +290,10 @@ public class Database
     /// <param name="actionDate">The date on which the action will be performed.</param>
     /// <param name="repeatAction">The action will be repeated every day at the specified time.</param>
     /// <param name="triggerCount">The number of times the action has been triggered.</param>
-    public void AddAction(ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, DateOnly? actionDate, bool repeatAction, int triggerCount)
+    public void AddAction(ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, DateOnly? actionDate, bool repeatAction)
     {
         // Create the command
-        SqliteCommand command = new($"INSERT INTO Actions (CreatedBy, ActionType, ActionData, ActionTime, ActionDate, RepeatAction, TriggerCount) VALUES ({createdBy}, {actionType}, '{actionData}', '{actionTime}', '{actionDate}', '{repeatAction}', '{triggerCount}');", _connection);
+        SqliteCommand command = new($"INSERT INTO Actions (CreatedBy, ActionType, ActionData, ActionTime, ActionDate, RepeatAction) VALUES ({createdBy}, {actionType}, '{actionData}', '{actionTime}', '{actionDate}', '{repeatAction}');", _connection);
         command.ExecuteNonQuery();
     }
     
