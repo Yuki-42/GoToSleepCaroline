@@ -206,10 +206,82 @@ This method adds a user to the database using the provided information.
 | displayName | string? | Display name of the user. Provided by discord.      | Yes      |
 | isAdmin     | bool?   | The admin status of the user                        | yes      | 
 
+##### Return value
+
+This method returns a DatabaseUser object representing the user added to the database.
+
+#### AddAction
+
+This method adds an action to the database using the provided information.
+
+##### Parameters
+
+| Name         | Type      | Description                                    | Nullable |
+|--------------|-----------|------------------------------------------------|----------|
+| createdBy    | ulong     | User who created the action.                   | No       |
+| actionType   | int       | Type of the action.                            | No       |
+| actionData   | JObject   | JSON formatted data of the action.             | No       |
+| actionTime   | TimeOnly  | Time when the action should be performed.      | No       |
+| actionDate   | DateOnly? | Date when the action should be performed.      | Yes      |
+| repeatAction | bool      | Whether the action should be repeated.         | No       |
+| triggerCount | int       | Number of times the action has been triggered. | No       |
+
+##### Return value
+
+This method returns a DatabaseAction object representing the action added to the database.
+
+#### AddActionType
+
+This method adds an action type to the database using the provided information.
+
+##### Parameters
+
+| Name        | Type    | Description                                        | Nullable |
+|-------------|---------|----------------------------------------------------|----------|
+| name        | string  | Name of the action type.                           | No       |
+| description | string  | Description of the action type.                    | No       |
+
+##### Return value
+
+This method returns a DatabaseActionType object representing the action type added to the database.
+
+#### AddLog
+
+This method adds a log to the database using the provided information.
+
+##### Parameters
+
+| Name       | Type    | Description                     | Nullable |
+|------------|---------|---------------------------------|----------|
+| createdBy  | ulong   | User who created the log.       | No       |
+| logLevel   | int     | Level of the log.               | No       |
+| logMessage | string  | Message of the log.             | No       |
+| logData    | JObject | JSON formatted data of the log. | No       |
+
+##### Return value
+
+This method returns a DatabaseLog object representing the log added to the database.
+
+
+
+
+
+
+
+
+
+
+
+### Get methods
+
+This section details all the methods used to get data from the database.
+
 ### Remove methods 
 
 This section details all the methods used to remove data from the database.
 
-### Alter Methods 
+### Modify Methods 
 
-This section details all the methods used to alter data in the database.
+This section details all the methods used to modify data in the database.
+
+
