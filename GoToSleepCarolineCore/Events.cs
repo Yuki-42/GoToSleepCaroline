@@ -18,7 +18,6 @@ public class Events
     [Event(DiscordEvent.MessageCreated)]
     public async Task MessageCreated(DiscordClient client, MessageCreateEventArgs eventArgs)
     {
-        Console.WriteLine("Test");
         // Check that the message is not from a bot
         if (eventArgs.Author.IsBot)
         {
@@ -45,10 +44,13 @@ public class Events
         
         Console.WriteLine("ready");
         
+        // Get the status vairables
+        string statusType = configurationRoot["statusType"] ?? throw new ArgumentException("Missing config field 'statusType'");
+        string statusText = configurationRoot["statusText"] ?? throw new ArgumentException("Missing config field 'statusText'");
+        
         // Set the activity
-        DiscordActivity activity = utils.ConvertActivity(
-            configurationRoot["statusType"] ?? throw new ArgumentException("Missing config field 'statusType'"),
-            configurationRoot["statusText"] ?? throw new ArgumentException("Missing config field 'statusText'"));
+        DiscordActivity activity = utils.ConvertActivity(statusType, statusText);
+        
         await client.UpdateStatusAsync(activity, UserStatus.Online);
     }
 }
