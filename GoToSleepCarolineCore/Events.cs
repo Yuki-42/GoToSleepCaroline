@@ -52,5 +52,7 @@ public class Events
         DiscordActivity activity = utils.ConvertActivity(statusType, statusText);
         
         await client.UpdateStatusAsync(activity, UserStatus.Online);
+        
+        // Create a new thread 
     }
 }
