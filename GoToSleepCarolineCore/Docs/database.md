@@ -180,10 +180,13 @@ This class is used to interact with the database described above.
 
 ## Properties
 
-| Name  | Type               | Description                   |
-|-------|--------------------|-------------------------------|
-| db    | SQLiteConnection   | Database object               |
-| Users | List<DatabaseUser> | List of users in the database |
+| Name         | Type                     | Description                                                                |
+|--------------|--------------------------|----------------------------------------------------------------------------|
+| db           | SQLiteConnection         | Database object                                                            |
+| Users        | List<DatabaseUser>       | List of users in the database                                              |
+| Actions      | List<DatabaseAction>     | List of actions in the database                                            |
+| ValidActions | List<DatabaseAction>     | List of all active actions in the database (upcoming or recurring actions) | 
+| ActionTypes  | List<DatabaseActionType> | List of action types in the database                                       |
 
 ## Methods
 
@@ -206,10 +209,6 @@ This method adds a user to the database using the provided information.
 | displayName | string? | Display name of the user. Provided by discord.      | Yes      |
 | isAdmin     | bool?   | The admin status of the user                        | yes      | 
 
-##### Return value
-
-This method returns a DatabaseUser object representing the user added to the database.
-
 #### AddAction
 
 This method adds an action to the database using the provided information.
@@ -226,10 +225,6 @@ This method adds an action to the database using the provided information.
 | repeatAction | bool      | Whether the action should be repeated.         | No       |
 | triggerCount | int       | Number of times the action has been triggered. | No       |
 
-##### Return value
-
-This method returns a DatabaseAction object representing the action added to the database.
-
 #### AddActionType
 
 This method adds an action type to the database using the provided information.
@@ -240,10 +235,6 @@ This method adds an action type to the database using the provided information.
 |-------------|---------|----------------------------------------------------|----------|
 | name        | string  | Name of the action type.                           | No       |
 | description | string  | Description of the action type.                    | No       |
-
-##### Return value
-
-This method returns a DatabaseActionType object representing the action type added to the database.
 
 #### AddLog
 
@@ -258,30 +249,169 @@ This method adds a log to the database using the provided information.
 | logMessage | string  | Message of the log.             | No       |
 | logData    | JObject | JSON formatted data of the log. | No       |
 
-##### Return value
-
-This method returns a DatabaseLog object representing the log added to the database.
-
-
-
-
-
-
-
-
-
-
-
 ### Get methods
 
 This section details all the methods used to get data from the database.
+
+#### GetUser
+
+This method gets a user from the database using the provided information.
+
+##### Parameters
+
+| Name   | Type  | Description                                         | Nullable |
+|--------|-------|-----------------------------------------------------|----------|
+| userId | ulong | Unique identifier of the user. Provided by discord. | No       |
+
+##### Returns
+
+`DatabaseUser` object representing the user in the database.
+
+#### GetAction
+
+This method gets an action from the database using the provided information.
+
+##### Parameters
+
+| Name | Type | Description                      | Nullable |
+|------|------|----------------------------------|----------|
+| id   | int  | Unique identifier of the action. | No       |
+
+##### Returns
+
+`DatabaseAction` object representing the action in the database.
+
+#### GetActionType
+
+This method gets an action type from the database using the provided information.
+
+##### Parameters
+
+| Name | Type | Description                          | Nullable |
+|------|------|--------------------------------------|----------|
+| id   | int  | Unique identifier of the action type | No       |
+
+##### Returns
+
+`DatabaseActionType` object representing the action type in the database.
 
 ### Remove methods 
 
 This section details all the methods used to remove data from the database.
 
+#### RemoveUser
+
+This method removes a user from the database using the provided information.
+
+##### Parameters
+
+| Name   | Type  | Description                                         | Nullable |
+|--------|-------|-----------------------------------------------------|----------|
+| userId | ulong | Unique identifier of the user. Provided by discord. | No       |
+
+#### RemoveAction
+
+This method removes an action from the database using the provided information.
+
+##### Parameters
+
+| Name | Type | Description                      | Nullable |
+|------|------|----------------------------------|----------|
+| id   | int  | Unique identifier of the action. | No       |
+
+#### RemoveActionType
+
+This method removes an action type from the database using the provided information.
+
+##### Parameters
+
+| Name | Type | Description                          | Nullable |
+|------|------|--------------------------------------|----------|
+| id   | int  | Unique identifier of the action type | No       |
+
 ### Modify Methods 
 
 This section details all the methods used to modify data in the database.
+
+#### Set Methods
+
+This subsection details all the methods used to set data in the database, replacing the existing data.
+
+##### SetUserUsername
+
+This method sets the username of a user in the database using the provided information.
+
+###### Parameters
+
+| Name   | Type   | Description                                         | Nullable |
+|--------|--------|-----------------------------------------------------|----------|
+| userId | ulong  | Unique identifier of the user. Provided by discord. | No       |
+| name   | string | Username of the user. Provided by discord.          | No       |
+
+##### SetUserDisplayName
+
+This method sets the display name of a user in the database using the provided information.
+
+###### Parameters
+
+| Name        | Type   | Description                                         | Nullable |
+|-------------|--------|-----------------------------------------------------|----------|
+| userId      | ulong  | Unique identifier of the user. Provided by discord. | No       |
+| displayName | string | Display name of the user. Provided by discord.      | No       |
+
+##### SetUserIsAdmin
+
+This method sets the admin status of a user in the database using the provided information.
+
+###### Parameters
+
+| Name    | Type  | Description                                         | Nullable |
+|---------|-------|-----------------------------------------------------|----------|
+| userId  | ulong | Unique identifier of the user. Provided by discord. | No       |
+| isAdmin | bool  | The admin status of the user                        | No       |
+
+##### SetUserIsBanned
+
+This method sets the banned status of a user in the database using the provided information.
+
+###### Parameters
+
+| Name     | Type  | Description                                         | Nullable |
+|----------|-------|-----------------------------------------------------|----------|
+| userId   | ulong | Unique identifier of the user. Provided by discord. | No       |
+| isBanned | bool  | The banned status of the user                       | No       |
+
+##### SetActionRepeat
+
+This method sets the repeat status of an action in the database using the provided information.
+
+###### Parameters
+
+| Name         | Type  | Description                                    | Nullable |
+|--------------|-------|------------------------------------------------|----------|
+| actionId     | int   | Unique identifier of the action.               | No       |
+| repeatAction | bool  | Whether the action should be repeated.         | No       |
+
+##### SetActionTypeName
+
+This method sets the name of an action type in the database using the provided information.
+
+###### Parameters
+
+| Name     | Type   | Description                          | Nullable |
+|----------|--------|--------------------------------------|----------|
+| actionId | int    | Unique identifier of the action type | No       |
+| name     | string | Name of the action type.             | No       |
+
+##### SetActionTypeDescription
+
+This method sets the description of an action type in the database using the provided information.
+
+###### Parameters
+
+| Name        | Type   | Description                          | Nullable |
+|-------------|--------|--------------------------------------|----------|
+| actionId    | int    | Unique identifier of the action type | No       |
+| description | string | Description of the action type.      | No       |
 
 
