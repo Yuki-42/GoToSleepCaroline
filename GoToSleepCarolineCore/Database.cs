@@ -272,16 +272,54 @@ public class Database
     /// <param name="displayName">The display name of the user to add.</param>
     /// <param name="isAdmin">The admin status of the user.</param>
     /// <param name="isBanned">The banned status of the user.</param>
-    public void AddUser(ulong userId, string username, string? displayName, bool? isAdmin, bool? isBanned)
+    public void AddUser(ulong userId, string username, string? displayName, bool? isAdmin, bool? isBanned, bool doReturn = true)
     {
         // Create the command 
         SqliteCommand command = new($"INSERT INTO Users (Id, Username, DisplayName, IsAdmin, IsBanned) VALUES ({userId}, '{username}', '{displayName}', '{isAdmin}', '{isBanned}');", _connection);
         command.ExecuteNonQuery();
     }
+    
 
-    public void AddUser(DatabaseUser user)
+    /// <summary>
+    /// Adds an action to the database.
+    /// </summary>
+    /// <param name="createdBy">The ID of the user who created the action.</param>
+    /// <param name="actionType">The ID of the action type.</param>
+    /// <param name="actionData">The data of the action.</param>
+    /// <param name="actionTime">The time at which the action will be performed.</param>
+    /// <param name="actionDate">The date on which the action will be performed.</param>
+    /// <param name="repeatAction">The action will be repeated every day at the specified time.</param>
+    /// <param name="triggerCount">The number of times the action has been triggered.</param>
+    public void AddAction(ulong createdBy, int actionType, JObject actionData, TimeOnly actionTime, DateOnly? actionDate, bool repeatAction, int triggerCount)
     {
-        // Create the command 
-        SqliteCommand command = new($"INSERT INTO Users VALUES ()");
+        // Create the command
+        SqliteCommand command = new($"INSERT INTO Actions (CreatedBy, ActionType, ActionData, ActionTime, ActionDate, RepeatAction, TriggerCount) VALUES ({createdBy}, {actionType}, '{actionData}', '{actionTime}', '{actionDate}', '{repeatAction}', '{triggerCount}');", _connection);
+        command.ExecuteNonQuery();
+    }
+    
+    /// <summary>
+    /// Adds an action type to the database.
+    /// </summary>
+    /// <param name="name">The name of the action type.</param>
+    /// <param name="description">The description of the action type.</param>
+    public void AddActionType(string name, string description)
+    {
+        // Create the command
+        SqliteCommand command = new($"INSERT INTO ActionTypes (Name, Description) VALUES ('{name}', '{description}');", _connection);
+        command.ExecuteNonQuery();
+    }
+    
+    /// <summary>
+    /// Adds a log to the database.
+    /// </summary>
+    /// <param name="createdBy">The ID of the user who created the log.</param>
+    /// <param name="logLevel">The log level of the log.</param>
+    /// <param name="logMessage">The message of the log.</param>
+    /// <param name="logData">The data of the log.</param>
+    public void AddLog(ulong createdBy, int logLevel, string logMessage, JObject logData)
+    {
+        // Create the command
+        SqliteCommand command = new($"INSERT INTO Logs (CreatedBy, LogLevel, LogMessage, LogData) VALUES ({createdBy}, {logLevel}, '{logMessage}', '{logData}');", _connection);
+        command.ExecuteNonQuery();
     }
 }
